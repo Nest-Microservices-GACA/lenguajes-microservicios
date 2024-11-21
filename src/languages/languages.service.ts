@@ -44,7 +44,7 @@ export class LanguagesService {
 
   async findOne(id: number) {
     const language = await this.languageRepository.findOneBy({ idu_lenguaje:id });
-
+    console.log(language)
     if( !language ){
       throw new RpcException({ 
         status: HttpStatus.NOT_FOUND, 

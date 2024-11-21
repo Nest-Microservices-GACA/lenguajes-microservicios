@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, ParseIntPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { LanguagesService } from './languages.service';
 import { CreateLanguageDto } from './dto/create-language.dto';
@@ -19,7 +19,7 @@ export class LanguagesController {
   }
 
   @MessagePattern('lenguaje.findOne')
-  findOne(@Payload() id: number) {
+  findOne(@Payload('id', ParseIntPipe) id: number) {
     return this.languagesService.findOne(id);
   }
 
@@ -29,7 +29,7 @@ export class LanguagesController {
   }
 
   @MessagePattern('lenguaje.remove')
-  remove(@Payload() id: number) {
+  remove(@Payload('id', ParseIntPipe) id: number) {
     return this.languagesService.remove(id);
   }
 }
