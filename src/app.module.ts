@@ -13,11 +13,11 @@ import { envs } from './config';
     }),
     TypeOrmModule.forRoot({
       type:'postgres',
-      host: envs.DB_HOST,
-      port: envs.port,
-      database: envs.DB_NAME,
-      username: envs.DB_USERNAME,
-      password: envs.DB_PASSWORD,
+      host: envs.dbHost,
+      port: envs.dbPort,
+      database: envs.dbName,
+      username: envs.dbUsername,
+      password: envs.dbPassword,
       autoLoadEntities: true,
       synchronize:false
     }),

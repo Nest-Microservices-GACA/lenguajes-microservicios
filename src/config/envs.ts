@@ -7,7 +7,7 @@ interface EnvVars {
   DB_USERNAME: string;
   DB_PASSWORD: string;
   DB_NAME: string;
-  DB_PORT: string;
+  DB_PORT: number;
   PORT: number;
 }
 
@@ -16,7 +16,7 @@ const envsSchema = joi.object({
   DB_USERNAME: joi.string().required(),
   DB_PASSWORD: joi.string().required(),
   DB_NAME: joi.string().required(),
-  DB_PORT: joi.string().required(),
+  DB_PORT: joi.number().required(),
   PORT: joi.number().required(),
 })
 .unknown(true);
@@ -32,10 +32,10 @@ const envVars:EnvVars = value;
 
 
 export const envs = {
-  DB_HOST: envVars.DB_HOST,
-  DB_USERNAME: envVars.DB_USERNAME,
-  DB_PASSWORD: envVars.DB_PASSWORD,
-  DB_NAME: envVars.DB_NAME,
-  DB_PORT: envVars.DB_PORT,
+  dbHost: envVars.DB_HOST,
+  dbUsername: envVars.DB_USERNAME,
+  dbPassword: envVars.DB_PASSWORD,
+  dbName: envVars.DB_NAME,
+  dbPort: envVars.DB_PORT,
   port: envVars.PORT,
 };
