@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Language } from './entities/language.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RpcException } from '@nestjs/microservices';
+import { CommonService } from './common/common.service';
 
 @Injectable()
 export class LanguagesService {
@@ -13,14 +14,18 @@ export class LanguagesService {
 
   constructor(
     @InjectRepository(Language)
-    private readonly languageRepository: Repository<Language>
+    private readonly languageRepository: Repository<Language>,
+    private readonly encryptionService: CommonService
   ){}
 
   async create(createLanguageDto: CreateLanguageDto) {
     try {
         
+      createLanguageDto.nom_lenguaje = this.encryptionService.encrypt(createLanguageDto.nom_lenguaje);
       const language = this.languageRepository.create(createLanguageDto);
       await this.languageRepository.save(language);
+
+      language.nom_lenguaje = this.encryptionService.decrypt(language.nom_lenguaje);
 
       return language;
 
@@ -34,6 +39,11 @@ export class LanguagesService {
     try {
 
       const languages = await this.languageRepository.find();
+
+      languages.map(language => {
+        language.nom_lenguaje = this.encryptionService.decrypt(language.nom_lenguaje);
+        // return decryptedLanguages;
+      });
   
       return languages ;
 
@@ -44,14 +54,14 @@ export class LanguagesService {
 
   async findOne(id: number) {
     const language = await this.languageRepository.findOneBy({ idu_lenguaje:id });
-    console.log(language)
+ 
     if( !language ){
       throw new RpcException({ 
         status: HttpStatus.NOT_FOUND, 
         message: `Lenguaje con ID ${id} no encontrado`
       });
     }
-    // language.nom_lenguaje = this.encryptionService.decrypt(language.nom_lenguaje);
+    language.nom_lenguaje = this.encryptionService.decrypt(language.nom_lenguaje);
     
     return language; 
   }
@@ -71,10 +81,10 @@ export class LanguagesService {
 
     try {
 
-      // language.nom_lenguaje = this.encryptionService.encrypt(language.nom_lenguaje);
+      language.nom_lenguaje = this.encryptionService.encrypt(language.nom_lenguaje);
       await this.languageRepository.save( language );
 
-      // language.nom_lenguaje = this.encryptionService.decrypt(language.nom_lenguaje);
+      language.nom_lenguaje = this.encryptionService.decrypt(language.nom_lenguaje);
       return language;
 
     } catch (error) {

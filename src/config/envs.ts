@@ -10,6 +10,7 @@ interface EnvVars {
   DB_PORT: number;
   PORT: number;
 
+  SECRET_KEY: string;
   NATS_SERVERS: string[]
 }
 
@@ -21,6 +22,7 @@ const envsSchema = joi.object({
   DB_PORT: joi.number().required(),
   PORT: joi.number().required(),
 
+  SECRET_KEY: joi.string().required(),
   NATS_SERVERS: joi.array().items( joi.string() ).required(),
 })
 .unknown(true);
@@ -46,5 +48,6 @@ export const envs = {
   dbPort: envVars.DB_PORT,
   port: envVars.PORT,
 
+  secretKey: envVars.SECRET_KEY,
   natsServes: envVars.NATS_SERVERS,
 };
